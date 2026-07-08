@@ -136,7 +136,7 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
 .photo-band .eyebrow::after{background:rgba(255,255,255,.18)}
 .photo-band h2{font-family:'Archivo';font-weight:900;font-size:clamp(34px,5vw,64px);letter-spacing:-.03em;text-transform:uppercase}
 .photo-band .quote{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.06em;color:rgba(255,255,255,.55);max-width:260px;text-align:right}
-.carousel{position:relative;padding:0 var(--pad)}
+.carousel{position:relative;padding:0 var(--pad);max-width:1320px;margin:0 auto}
 .carousel .viewport{
   overflow:hidden;border-radius:14px;background:#1c1c1c;
 }
@@ -145,7 +145,7 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
   transition:transform .6s cubic-bezier(.65,0,.35,1);
 }
 .slide{flex:0 0 100%;aspect-ratio:16/9;position:relative}
-.slide img{width:100%;height:100%;object-fit:cover;display:block}
+.slide img{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:1}
 .slide .empty{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.08em;
