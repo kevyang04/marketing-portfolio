@@ -110,33 +110,69 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s cubic-bezier(.16,1,.3,1)}
 .reveal.in{opacity:1;transform:none}
 
-/* ---- work rows ---- */
-.work-row{
-  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px;
-  padding:32px 0;border-top:1px solid var(--line);
-  text-decoration:none;color:var(--ink);
+/* ---- work accordion ---- */
+.work-item{border-top:1px solid var(--line)}
+.work-item:last-of-type{border-bottom:1px solid var(--line)}
+.work-head{
+  display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:24px;
+  width:100%;padding:32px 0;
+  background:none;border:none;text-align:left;color:var(--ink);font:inherit;
   transition:padding-left .35s cubic-bezier(.65,0,.35,1);cursor:pointer;
 }
-.work-row:last-of-type{border-bottom:1px solid var(--line)}
-.work-row:hover{padding-left:16px}
-.work-row .idx{font-family:'IBM Plex Mono';font-size:12px;color:var(--grey)}
-.work-row h3{font-family:'Archivo';font-weight:800;font-size:clamp(22px,3.2vw,40px);letter-spacing:-.02em;text-transform:uppercase;transition:color .25s}
-.work-row:hover h3{color:var(--accent)}
-.work-row .tags{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.06em;color:var(--grey);text-transform:uppercase;text-align:right}
-.work-row p{grid-column:2/4;grid-row:2;color:var(--grey);font-size:15px;line-height:1.55;max-width:680px}
-.work-row p b{color:var(--ink);font-weight:600}
+.work-head:hover{padding-left:16px}
+.work-head:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
+.work-head .idx{font-family:'IBM Plex Mono';font-size:12px;color:var(--grey)}
+.work-head h3{font-family:'Archivo';font-weight:800;font-size:clamp(22px,3.2vw,40px);letter-spacing:-.02em;text-transform:uppercase;transition:color .25s}
+.work-head:hover h3{color:var(--accent)}
+.work-head .brand{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.work-head .brand img{height:clamp(24px,2.6vw,34px);width:auto;display:block}
+.work-head .tags{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.06em;color:var(--grey);text-transform:uppercase;text-align:right}
+.work-head p{grid-column:2/5;grid-row:2;color:var(--grey);font-size:15px;line-height:1.55;max-width:680px}
+.work-head p b{color:var(--ink);font-weight:600}
+.w-toggle{
+  width:44px;height:44px;border-radius:50%;flex-shrink:0;
+  border:1px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:400;line-height:1;
+  transition:transform .45s cubic-bezier(.65,0,.35,1),background .25s,color .25s;
+}
+.work-head:hover .w-toggle{background:var(--ink);color:#fff}
+.work-item.open .w-toggle{transform:rotate(45deg);background:var(--accent);border-color:var(--accent);color:#fff}
+/* expandable panel */
+.work-detail{
+  display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .55s cubic-bezier(.65,0,.35,1);
+}
+.work-detail>.detail-inner{overflow:hidden;min-height:0}
+.work-item.open .work-detail{grid-template-rows:1fr}
+.detail-pad{padding:8px 0 40px}
+/* photo slots inside dropdowns */
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.d-slot{
+  aspect-ratio:4/3;border-radius:12px;overflow:hidden;position:relative;
+  background:#f2f2f2;
+}
+.d-slot img{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:1;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.d-slot:hover img{transform:scale(1.04)}
+.d-slot .empty{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.06em;
+  text-transform:uppercase;color:#9a9a9a;
+  border:1px dashed #d5d5d5;border-radius:12px;text-align:center;padding:8px;
+}
 
-/* ---- photography ---- */
+/* ---- photography (embedded in dropdown) ---- */
 .photo-band{
   background:var(--ink);color:#fff;
-  padding:clamp(64px,8vw,120px) 0;
+  padding:clamp(36px,4.5vw,64px) 0;
+  border-radius:16px;
 }
-.photo-band .head{padding:0 var(--pad);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:48px}
+.photo-band .head{padding:0 clamp(20px,3vw,44px);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:36px}
 .photo-band .eyebrow{color:rgba(255,255,255,.5)}
 .photo-band .eyebrow::after{background:rgba(255,255,255,.18)}
-.photo-band h2{font-family:'Archivo';font-weight:900;font-size:clamp(34px,5vw,64px);letter-spacing:-.03em;text-transform:uppercase}
+.photo-band h2{font-family:'Archivo';font-weight:900;font-size:clamp(28px,4vw,52px);letter-spacing:-.03em;text-transform:uppercase}
 .photo-band .quote{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.06em;color:rgba(255,255,255,.55);max-width:260px;text-align:right}
-.carousel{position:relative;padding:0 var(--pad);max-width:1320px;margin:0 auto}
+.carousel{position:relative;padding:0 clamp(20px,3vw,44px);max-width:1320px;margin:0 auto}
 .carousel .viewport{
   overflow:hidden;border-radius:14px;background:#1c1c1c;
 }
@@ -170,7 +206,7 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
 .c-dots{display:flex;gap:8px}
 .c-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);border:none;padding:0;cursor:pointer;transition:background .25s,transform .25s}
 .c-dot.on{background:#fff;transform:scale(1.2)}
-.photo-band .foot{padding:24px var(--pad) 0;font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.photo-band .foot{padding:24px clamp(20px,3vw,44px) 0;font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45)}
 .photo-band .foot a{color:#fff;text-decoration:none}
 .photo-band .foot a:hover{color:var(--accent)}
 
@@ -212,9 +248,10 @@ footer .foot-row a:hover{color:var(--accent)}
   .hero .meta{grid-row:3}
   .hero .intro{grid-column:1;grid-row:4;text-indent:2em}
   .about-grid{grid-template-columns:1fr;gap:40px}
-  .work-row{grid-template-columns:auto 1fr}
-  .work-row .tags{display:none}
-  .work-row p{grid-column:1/3}
+  .work-head{grid-template-columns:auto 1fr auto;gap:14px}
+  .work-head .brand{display:none}
+  .w-toggle{width:36px;height:36px;font-size:16px}
+  .detail-grid{grid-template-columns:1fr}
   .tl-item{grid-template-columns:1fr}
   nav ul{gap:16px}
   .photo-band .quote{text-align:left}
@@ -275,66 +312,129 @@ footer .foot-row a:hover{color:var(--accent)}
   <section id="work">
     <div class="eyebrow reveal">Selected Work</div>
 
-    <a class="work-row reveal">
-      <span class="idx">01</span>
-      <h3>Tapout Tuning — Sales &amp; Social Growth</h3>
-      <span class="tags">E-Commerce / Social</span>
-      <p>Produced targeted multimedia content that lifted engagement <b>200% on average</b> across Instagram, Facebook, and YouTube. Consultative sales calls converted leads into multiple <b>$25,000 deals</b>.</p>
-    </a>
+    <div class="work-item reveal">
+      <button class="work-head" aria-expanded="false">
+        <span class="idx">01</span>
+        <h3>Tapout Tuning — Sales &amp; Social Growth</h3>
+        <span class="brand">
+          <img src="photos/logo-tapout.png" alt="Tapout Tuning">
+          <span class="tags">E-Commerce / Social</span>
+        </span>
+        <span class="w-toggle" aria-hidden="true">+</span>
+      </button>
+      <div class="work-detail">
+        <div class="detail-inner">
+          <div class="detail-pad">
+            <p style="color:var(--grey);font-size:15px;line-height:1.55;max-width:680px;margin-bottom:24px">Produced targeted multimedia content that lifted engagement <b style="color:var(--ink);font-weight:600">200% on average</b> across Instagram, Facebook, and YouTube. Consultative sales calls converted leads into multiple <b style="color:var(--ink);font-weight:600">$25,000 deals</b>.</p>
+            <!-- Drop images into photos/ as tapout-1.jpg, tapout-2.jpg, tapout-3.jpg -->
+            <div class="detail-grid">
+              <div class="d-slot"><img src="photos/tapout-1.jpg" alt="Tapout Tuning work sample" onerror="this.remove()"><div class="empty">photos/tapout-1.jpg</div></div>
+              <div class="d-slot"><img src="photos/tapout-2.jpg" alt="Tapout Tuning work sample" onerror="this.remove()"><div class="empty">photos/tapout-2.jpg</div></div>
+              <div class="d-slot"><img src="photos/tapout-3.jpg" alt="Tapout Tuning work sample" onerror="this.remove()"><div class="empty">photos/tapout-3.jpg</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <a class="work-row reveal">
-      <span class="idx">02</span>
-      <h3>KeyBank — Campaign Strategy &amp; Analytics</h3>
-      <span class="tags">Enterprise Marketing Internship</span>
-      <p>Designed and presented sponsorship campaign proposals across <b>5 partner companies</b>, built and tested targeted audiences and customer journeys in <b>Adobe Journey Optimizer</b>, and turned Sprinklr and Excel engagement data into actionable insights for future campaigns.</p>
-    </a>
+    <div class="work-item reveal">
+      <button class="work-head" aria-expanded="false">
+        <span class="idx">02</span>
+        <h3>KeyBank — Campaign Strategy &amp; Analytics</h3>
+        <span class="brand">
+          <img src="photos/logo-keybank.png" alt="KeyBank">
+          <span class="tags">Enterprise Marketing Internship</span>
+        </span>
+        <span class="w-toggle" aria-hidden="true">+</span>
+      </button>
+      <div class="work-detail">
+        <div class="detail-inner">
+          <div class="detail-pad">
+            <p style="color:var(--grey);font-size:15px;line-height:1.55;max-width:680px;margin-bottom:24px">Designed and presented sponsorship campaign proposals across <b style="color:var(--ink);font-weight:600">5 partner companies</b>, built and tested targeted audiences and customer journeys in <b style="color:var(--ink);font-weight:600">Adobe Journey Optimizer</b>, and turned Sprinklr and Excel engagement data into actionable insights for future campaigns.</p>
+            <!-- Drop images into photos/ as keybank-1.jpg, keybank-2.jpg, keybank-3.jpg -->
+            <div class="detail-grid">
+              <div class="d-slot"><img src="photos/keybank-1.jpg" alt="KeyBank campaign work sample" onerror="this.remove()"><div class="empty">photos/keybank-1.jpg</div></div>
+              <div class="d-slot"><img src="photos/keybank-2.jpg" alt="KeyBank campaign work sample" onerror="this.remove()"><div class="empty">photos/keybank-2.jpg</div></div>
+              <div class="d-slot"><img src="photos/keybank-3.jpg" alt="KeyBank campaign work sample" onerror="this.remove()"><div class="empty">photos/keybank-3.jpg</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <a class="work-row reveal">
-      <span class="idx">03</span>
-      <h3>Gen AI Exploration Lab — Adoption Program</h3>
-      <span class="tags">Leadership / Education</span>
-      <p>Led a team of 3 supporting <b>200+ faculty and students</b> with AI adoption across ChatGPT, Copilot, and Claude — directing research, developing learning materials, and helping educators teach practical, responsible AI skills.</p>
-    </a>
+    <div class="work-item reveal">
+      <button class="work-head" aria-expanded="false">
+        <span class="idx">03</span>
+        <h3>Gen AI Exploration Lab — Adoption Program</h3>
+        <span class="brand">
+          <img src="photos/logo-ithaca.png" alt="Ithaca College">
+          <span class="tags">Leadership / Education</span>
+        </span>
+        <span class="w-toggle" aria-hidden="true">+</span>
+      </button>
+      <div class="work-detail">
+        <div class="detail-inner">
+          <div class="detail-pad">
+            <p style="color:var(--grey);font-size:15px;line-height:1.55;max-width:680px;margin-bottom:24px">Led a team of 3 supporting <b style="color:var(--ink);font-weight:600">200+ faculty and students</b> with AI adoption across ChatGPT, Copilot, and Claude — directing research, developing learning materials, and helping educators teach practical, responsible AI skills.</p>
+            <!-- Drop images into photos/ as genai-1.jpg, genai-2.jpg, genai-3.jpg -->
+            <div class="detail-grid">
+              <div class="d-slot"><img src="photos/genai-1.jpg" alt="GenAI Exploration Lab work sample" onerror="this.remove()"><div class="empty">photos/genai-1.jpg</div></div>
+              <div class="d-slot"><img src="photos/genai-2.jpg" alt="GenAI Exploration Lab work sample" onerror="this.remove()"><div class="empty">photos/genai-2.jpg</div></div>
+              <div class="d-slot"><img src="photos/genai-3.jpg" alt="GenAI Exploration Lab work sample" onerror="this.remove()"><div class="empty">photos/genai-3.jpg</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <a class="work-row reveal">
-      <span class="idx">04</span>
-      <h3>Freelance Automotive Photography</h3>
-      <span class="tags">Freelance / 2019 — 2023</span>
-      <p>Built a freelance photo and video brand shooting car meets, track days, and owner features — end-to-end from client outreach to editing and delivery. See the gallery below.</p>
-    </a>
+    <div class="work-item reveal">
+      <button class="work-head" aria-expanded="false">
+        <span class="idx">04</span>
+        <h3>Freelance Automotive Photography</h3>
+        <span class="brand">
+          <span class="tags">Freelance / 2019 — 2023</span>
+        </span>
+        <span class="w-toggle" aria-hidden="true">+</span>
+      </button>
+      <div class="work-detail">
+        <div class="detail-inner">
+          <div class="detail-pad">
+            <p style="color:var(--grey);font-size:15px;line-height:1.55;max-width:680px;margin-bottom:24px">Built a freelance photo and video brand shooting car meets, track days, and owner features — end-to-end from client outreach to editing and delivery.</p>
+            <div class="photo-band" id="photography">
+              <div class="head">
+                <div style="flex:1;min-width:260px">
+                  <div class="eyebrow">Freelance Photography</div>
+                  <h2>Cameras let us<br>time travel</h2>
+                </div>
+                <p class="quote">Meets, HPDE track days, and owner features — shot across Ohio and New York, 2019–2023.</p>
+              </div>
+              <div class="carousel" id="carousel">
+                <div class="viewport">
+                  <div class="slides" id="slides">
+                    <div class="slide"><img src="photos/portfolio-1.jpg" alt="Kevin Yang creative portfolio — cover, white Subaru STI at night" onerror="this.remove()"><div class="empty">photos/portfolio-1.jpg</div></div>
+                    <div class="slide"><img src="photos/portfolio-2.jpg" alt="Silver Nissan GT-R night shoot" onerror="this.remove()"><div class="empty">photos/portfolio-2.jpg</div></div>
+                    <div class="slide"><img src="photos/portfolio-3.jpg" alt="Ferrari F430 Scuderia detail series" onerror="this.remove()"><div class="empty">photos/portfolio-3.jpg</div></div>
+                    <div class="slide"><img src="photos/portfolio-4.jpg" alt="Corvette Challenge race car in the shop" onerror="this.remove()"><div class="empty">photos/portfolio-4.jpg</div></div>
+                    <div class="slide"><img src="photos/portfolio-5.jpg" alt="Car meet and Putnam Park HPDE coverage" onerror="this.remove()"><div class="empty">photos/portfolio-5.jpg</div></div>
+                    <div class="slide"><img src="photos/portfolio-6.jpg" alt="Miata, STI in snow, and track Miata triptych" onerror="this.remove()"><div class="empty">photos/portfolio-6.jpg</div></div>
+                    <div class="slide"><img src="photos/portfolio-7.jpg" alt="Skyline GT-R and K24 engine bay details" onerror="this.remove()"><div class="empty">photos/portfolio-7.jpg</div></div>
+                  </div>
+                </div>
+                <div class="controls">
+                  <span class="c-count"><span id="cNow">01</span> / <span id="cTotal">07</span></span>
+                  <div class="c-dots" id="cDots"></div>
+                  <div class="arrows">
+                    <button class="c-btn" id="cPrev" aria-label="Previous slide">←</button>
+                    <button class="c-btn" id="cNext" aria-label="Next slide">→</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
-
-  <!-- ================= PHOTOGRAPHY ================= -->
-  <div class="photo-band" id="photography">
-    <div class="head">
-      <div style="flex:1;min-width:260px">
-        <div class="eyebrow reveal">Freelance Photography</div>
-        <h2 class="reveal">Cameras let us<br>time travel</h2>
-      </div>
-      <p class="quote reveal">Meets, HPDE track days, and owner features — shot across Ohio and New York, 2019–2023.</p>
-    </div>
-    <div class="carousel reveal" id="carousel">
-      <div class="viewport">
-        <div class="slides" id="slides">
-          <div class="slide"><img src="photos/portfolio-1.jpg" alt="Kevin Yang creative portfolio — cover, white Subaru STI at night" onerror="this.remove()"><div class="empty">photos/portfolio-1.jpg</div></div>
-          <div class="slide"><img src="photos/portfolio-2.jpg" alt="Silver Nissan GT-R night shoot" onerror="this.remove()"><div class="empty">photos/portfolio-2.jpg</div></div>
-          <div class="slide"><img src="photos/portfolio-3.jpg" alt="Ferrari F430 Scuderia detail series" onerror="this.remove()"><div class="empty">photos/portfolio-3.jpg</div></div>
-          <div class="slide"><img src="photos/portfolio-4.jpg" alt="Corvette Challenge race car in the shop" onerror="this.remove()"><div class="empty">photos/portfolio-4.jpg</div></div>
-          <div class="slide"><img src="photos/portfolio-5.jpg" alt="Car meet and Putnam Park HPDE coverage" onerror="this.remove()"><div class="empty">photos/portfolio-5.jpg</div></div>
-          <div class="slide"><img src="photos/portfolio-6.jpg" alt="Miata, STI in snow, and track Miata triptych" onerror="this.remove()"><div class="empty">photos/portfolio-6.jpg</div></div>
-          <div class="slide"><img src="photos/portfolio-7.jpg" alt="Skyline GT-R and K24 engine bay details" onerror="this.remove()"><div class="empty">photos/portfolio-7.jpg</div></div>
-        </div>
-      </div>
-      <div class="controls">
-        <span class="c-count"><span id="cNow">01</span> / <span id="cTotal">07</span></span>
-        <div class="c-dots" id="cDots"></div>
-        <div class="arrows">
-          <button class="c-btn" id="cPrev" aria-label="Previous slide">←</button>
-          <button class="c-btn" id="cNext" aria-label="Next slide">→</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- ================= ABOUT ================= -->
   <section id="about">
@@ -396,6 +496,27 @@ const io = new IntersectionObserver(entries=>{
   entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
 },{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---- work accordion ---- */
+document.querySelectorAll('.work-item').forEach(item=>{
+  const head = item.querySelector('.work-head');
+  head.addEventListener('click',()=>{
+    const open = item.classList.toggle('open');
+    head.setAttribute('aria-expanded', open);
+  });
+});
+
+/* nav "Photography" link opens the photography dropdown, then scrolls to it */
+document.querySelectorAll('a[href="#photography"]').forEach(a=>{
+  a.addEventListener('click',()=>{
+    const item = document.getElementById('photography').closest('.work-item');
+    if(item && !item.classList.contains('open')){
+      item.classList.add('open');
+      item.querySelector('.work-head').setAttribute('aria-expanded','true');
+      setTimeout(()=>document.getElementById('photography').scrollIntoView({behavior:'smooth',block:'nearest'}),580);
+    }
+  });
+});
 
 /* ---- photography carousel ---- */
 const slidesEl = document.getElementById('slides');
