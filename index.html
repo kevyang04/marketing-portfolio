@@ -101,6 +101,9 @@ nav a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 
 /* ---- sections ---- */
 section{padding:clamp(64px,8vw,120px) var(--pad)}
+/* tighten the seam between Work and About (their paddings were stacking) */
+#work{padding-bottom:clamp(24px,3vw,48px)}
+#about{padding-top:clamp(24px,3vw,48px)}
 .eyebrow{
   font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.12em;
   text-transform:uppercase;color:var(--grey);
