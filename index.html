@@ -126,10 +126,6 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
 .work-row p{grid-column:2/4;grid-row:2;color:var(--grey);font-size:15px;line-height:1.55;max-width:680px}
 .work-row p b{color:var(--ink);font-weight:600}
 
-#preview{position:fixed;z-index:60;pointer-events:none;width:280px;height:190px;border-radius:14px;overflow:hidden;opacity:0;transform:scale(.85);transition:opacity .25s ease,transform .25s ease}
-#preview.show{opacity:1;transform:scale(1)}
-#preview .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Archivo';font-weight:900;font-size:20px;color:#fff;text-transform:uppercase;letter-spacing:.02em}
-
 /* ---- photography ---- */
 .photo-band{
   background:var(--ink);color:#fff;
@@ -140,26 +136,40 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
 .photo-band .eyebrow::after{background:rgba(255,255,255,.18)}
 .photo-band h2{font-family:'Archivo';font-weight:900;font-size:clamp(34px,5vw,64px);letter-spacing:-.03em;text-transform:uppercase}
 .photo-band .quote{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.06em;color:rgba(255,255,255,.55);max-width:260px;text-align:right}
-.gallery{
-  display:flex;gap:16px;overflow-x:auto;padding:0 var(--pad) 12px;
-  scroll-snap-type:x mandatory;
+.carousel{position:relative;padding:0 var(--pad)}
+.carousel .viewport{
+  overflow:hidden;border-radius:14px;background:#1c1c1c;
 }
-.gallery::-webkit-scrollbar{height:6px}
-.gallery::-webkit-scrollbar-thumb{background:rgba(255,255,255,.25);border-radius:3px}
-.shot{
-  flex:0 0 auto;width:clamp(240px,34vw,440px);aspect-ratio:4/3;
-  border-radius:14px;overflow:hidden;scroll-snap-align:start;
-  background:#1c1c1c;position:relative;
+.carousel .slides{
+  display:flex;
+  transition:transform .6s cubic-bezier(.65,0,.35,1);
 }
-.shot img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.16,1,.3,1)}
-.shot:hover img{transform:scale(1.05)}
-.shot .empty{
-  position:absolute;inset:0;display:flex;flex-direction:column;gap:8px;
-  align-items:center;justify-content:center;
+.slide{flex:0 0 100%;aspect-ratio:16/9;position:relative}
+.slide img{width:100%;height:100%;object-fit:cover;display:block}
+.slide .empty{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.08em;
   text-transform:uppercase;color:rgba(255,255,255,.4);
-  border:1px dashed rgba(255,255,255,.2);border-radius:14px;
 }
+.carousel .controls{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:20px;
+}
+.carousel .arrows{display:flex;gap:12px}
+.c-btn{
+  width:48px;height:48px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;
+  font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .25s,color .25s,border-color .25s,transform .15s;
+}
+.c-btn:hover{background:#fff;color:var(--ink);border-color:#fff}
+.c-btn:active{transform:scale(.92)}
+.c-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.c-count{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.1em;color:rgba(255,255,255,.55)}
+.c-dots{display:flex;gap:8px}
+.c-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);border:none;padding:0;cursor:pointer;transition:background .25s,transform .25s}
+.c-dot.on{background:#fff;transform:scale(1.2)}
 .photo-band .foot{padding:24px var(--pad) 0;font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45)}
 .photo-band .foot a{color:#fff;text-decoration:none}
 .photo-band .foot a:hover{color:var(--accent)}
@@ -206,7 +216,6 @@ footer .foot-row a:hover{color:var(--accent)}
   .work-row .tags{display:none}
   .work-row p{grid-column:1/3}
   .tl-item{grid-template-columns:1fr}
-  #preview{display:none}
   nav ul{gap:16px}
   .photo-band .quote{text-align:left}
 }
@@ -266,36 +275,34 @@ footer .foot-row a:hover{color:var(--accent)}
   <section id="work">
     <div class="eyebrow reveal">Selected Work</div>
 
-    <a class="work-row reveal" data-color="#2b39ff" data-label="Tapout Tuning">
+    <a class="work-row reveal">
       <span class="idx">01</span>
       <h3>Tapout Tuning — Web Management &amp; Social Growth</h3>
       <span class="tags">E-Commerce / Social</span>
       <p>Led the migration of the company store from WordPress to Shopify with improved usability and SEO, and produced targeted multimedia content that lifted engagement <b>200% on average</b> across Instagram, Facebook, and YouTube. Consultative sales calls converted leads into multiple <b>$25,000 deals</b>.</p>
     </a>
 
-    <a class="work-row reveal" data-color="#c8102e" data-label="KeyBank">
+    <a class="work-row reveal">
       <span class="idx">02</span>
       <h3>KeyBank — Campaign Strategy &amp; Analytics</h3>
       <span class="tags">Enterprise Marketing Internship</span>
       <p>Designed and presented sponsorship campaign proposals across <b>5 partner companies</b>, built and tested targeted audiences and customer journeys in <b>Adobe Journey Optimizer</b>, and turned Sprinklr and Excel engagement data into actionable insights for future campaigns.</p>
     </a>
 
-    <a class="work-row reveal" data-color="#0a0a0a" data-label="IT@IC">
+    <a class="work-row reveal">
       <span class="idx">03</span>
       <h3>Gen AI Exploration Lab — Adoption Program</h3>
       <span class="tags">Leadership / Education</span>
       <p>Led a team of 3 supporting <b>200+ faculty and students</b> with AI adoption across ChatGPT, Copilot, and Claude — directing research, developing learning materials, and helping educators teach practical, responsible AI skills.</p>
     </a>
 
-    <a class="work-row reveal" data-color="#00a86b" data-label="Freelance Automotive Photography">
+    <a class="work-row reveal">
       <span class="idx">04</span>
       <h3>Freelance Automotive Photography</h3>
       <span class="tags">Freelance / 2019 — 2023</span>
       <p>Built a freelance photo and video brand shooting car meets, track days, and owner features — end-to-end from client outreach to editing and delivery. See the gallery below.</p>
     </a>
   </section>
-
-  <div id="preview"><div class="ph" id="previewPh"></div></div>
 
   <!-- ================= PHOTOGRAPHY ================= -->
   <div class="photo-band" id="photography">
@@ -306,14 +313,26 @@ footer .foot-row a:hover{color:var(--accent)}
       </div>
       <p class="quote reveal">Meets, HPDE track days, and owner features — shot across Ohio and New York, 2019–2023.</p>
     </div>
-    <div class="gallery reveal">
-      <!-- Drop your shots into a "photos" folder as photo-1.jpg ... photo-6.jpg -->
-      <div class="shot"><img src="photos/photo-1.jpg" alt="Automotive photography by Kevin Yang" onerror="this.remove()"><div class="empty">photos/photo-1.jpg</div></div>
-      <div class="shot"><img src="photos/photo-2.jpg" alt="Automotive photography by Kevin Yang" onerror="this.remove()"><div class="empty">photos/photo-2.jpg</div></div>
-      <div class="shot"><img src="photos/photo-3.jpg" alt="Automotive photography by Kevin Yang" onerror="this.remove()"><div class="empty">photos/photo-3.jpg</div></div>
-      <div class="shot"><img src="photos/photo-4.jpg" alt="Automotive photography by Kevin Yang" onerror="this.remove()"><div class="empty">photos/photo-4.jpg</div></div>
-      <div class="shot"><img src="photos/photo-5.jpg" alt="Automotive photography by Kevin Yang" onerror="this.remove()"><div class="empty">photos/photo-5.jpg</div></div>
-      <div class="shot"><img src="photos/photo-6.jpg" alt="Automotive photography by Kevin Yang" onerror="this.remove()"><div class="empty">photos/photo-6.jpg</div></div>
+    <div class="carousel reveal" id="carousel">
+      <div class="viewport">
+        <div class="slides" id="slides">
+          <div class="slide"><img src="photos/portfolio-1.jpg" alt="Kevin Yang creative portfolio — cover, white Subaru STI at night" onerror="this.remove()"><div class="empty">photos/portfolio-1.jpg</div></div>
+          <div class="slide"><img src="photos/portfolio-2.jpg" alt="Silver Nissan GT-R night shoot" onerror="this.remove()"><div class="empty">photos/portfolio-2.jpg</div></div>
+          <div class="slide"><img src="photos/portfolio-3.jpg" alt="Ferrari F430 Scuderia detail series" onerror="this.remove()"><div class="empty">photos/portfolio-3.jpg</div></div>
+          <div class="slide"><img src="photos/portfolio-4.jpg" alt="Corvette Challenge race car in the shop" onerror="this.remove()"><div class="empty">photos/portfolio-4.jpg</div></div>
+          <div class="slide"><img src="photos/portfolio-5.jpg" alt="Car meet and Putnam Park HPDE coverage" onerror="this.remove()"><div class="empty">photos/portfolio-5.jpg</div></div>
+          <div class="slide"><img src="photos/portfolio-6.jpg" alt="Miata, STI in snow, and track Miata triptych" onerror="this.remove()"><div class="empty">photos/portfolio-6.jpg</div></div>
+          <div class="slide"><img src="photos/portfolio-7.jpg" alt="Skyline GT-R and K24 engine bay details" onerror="this.remove()"><div class="empty">photos/portfolio-7.jpg</div></div>
+        </div>
+      </div>
+      <div class="controls">
+        <span class="c-count"><span id="cNow">01</span> / <span id="cTotal">07</span></span>
+        <div class="c-dots" id="cDots"></div>
+        <div class="arrows">
+          <button class="c-btn" id="cPrev" aria-label="Previous slide">←</button>
+          <button class="c-btn" id="cNext" aria-label="Next slide">→</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -378,27 +397,51 @@ const io = new IntersectionObserver(entries=>{
 },{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-const preview = document.getElementById('preview');
-const ph = document.getElementById('previewPh');
-let px=0, py=0, tx=0, ty=0, raf;
-function loop(){
-  px += (tx-px)*.15; py += (ty-py)*.15;
-  preview.style.left = px+'px'; preview.style.top = py+'px';
-  raf = requestAnimationFrame(loop);
+/* ---- photography carousel ---- */
+const slidesEl = document.getElementById('slides');
+const slideCount = slidesEl.children.length;
+const cNow = document.getElementById('cNow');
+const cDots = document.getElementById('cDots');
+document.getElementById('cTotal').textContent = String(slideCount).padStart(2,'0');
+let current = 0;
+
+for(let i=0;i<slideCount;i++){
+  const d = document.createElement('button');
+  d.className = 'c-dot';
+  d.setAttribute('aria-label','Go to slide '+(i+1));
+  d.addEventListener('click',()=>go(i));
+  cDots.appendChild(d);
 }
-document.querySelectorAll('.work-row').forEach(row=>{
-  row.addEventListener('mouseenter',()=>{
-    ph.style.background = row.dataset.color;
-    ph.textContent = row.dataset.label;
-    preview.classList.add('show');
-    cancelAnimationFrame(raf); loop();
-  });
-  row.addEventListener('mousemove',e=>{ tx = e.clientX + 24; ty = e.clientY - 95; });
-  row.addEventListener('mouseleave',()=>{
-    preview.classList.remove('show');
-    cancelAnimationFrame(raf);
-  });
+
+function go(i){
+  current = (i + slideCount) % slideCount;
+  slidesEl.style.transform = `translateX(-${current*100}%)`;
+  cNow.textContent = String(current+1).padStart(2,'0');
+  [...cDots.children].forEach((d,idx)=>d.classList.toggle('on', idx===current));
+}
+document.getElementById('cPrev').addEventListener('click',()=>go(current-1));
+document.getElementById('cNext').addEventListener('click',()=>go(current+1));
+
+/* arrow keys when carousel is on screen */
+document.addEventListener('keydown',e=>{
+  const rect = document.getElementById('carousel').getBoundingClientRect();
+  if(rect.top < window.innerHeight && rect.bottom > 0){
+    if(e.key==='ArrowLeft') go(current-1);
+    if(e.key==='ArrowRight') go(current+1);
+  }
 });
+
+/* touch swipe */
+let startX = null;
+slidesEl.addEventListener('touchstart',e=>{ startX = e.touches[0].clientX; },{passive:true});
+slidesEl.addEventListener('touchend',e=>{
+  if(startX===null) return;
+  const dx = e.changedTouches[0].clientX - startX;
+  if(Math.abs(dx) > 40) go(current + (dx<0 ? 1 : -1));
+  startX = null;
+},{passive:true});
+
+go(0);
 </script>
 </body>
 </html>
