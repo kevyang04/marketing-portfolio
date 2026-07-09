@@ -185,7 +185,7 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
 .ext-link:hover{color:var(--accent);border-color:var(--accent)}
 /* ---- KeyBank visual: stat band + journey diagram ---- */
 .kb-stats{
-  display:grid;grid-template-columns:repeat(4,1fr);
+  display:grid;grid-template-columns:repeat(3,1fr);
   border-top:1px solid var(--line);border-bottom:1px solid var(--line);
   margin-bottom:28px;
 }
@@ -224,6 +224,7 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
   .kb-stat:nth-child(even){padding-left:20px}
   .kb-stat:nth-child(odd){border-left:none;padding-left:0}
   .kb-stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .kb-stat:nth-child(3){grid-column:1/-1}
   .kb-flow{flex-direction:column}
   .kb-arrow::before{content:"↓"}
 }
