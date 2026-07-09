@@ -81,9 +81,9 @@ nav a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 @keyframes pop{to{opacity:1;transform:scale(1)}}
 
 .hero .meta{grid-column:1;grid-row:3;align-self:end;display:flex;flex-direction:column;gap:8px;opacity:0;animation:fade 1s ease .7s forwards}
-.hero .meta a{color:var(--ink);text-decoration:none;font-size:15px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.hero .meta a{color:var(--ink);text-decoration:none;font-size:clamp(18px,2vw,26px);font-weight:600;display:inline-flex;align-items:center;gap:8px}
 .hero .meta a:hover{color:var(--accent)}
-.hero .meta .loc{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.08em;color:var(--grey);text-transform:uppercase}
+.hero .meta .loc{font-family:'IBM Plex Mono';font-size:clamp(13px,1.3vw,16px);letter-spacing:.08em;color:var(--grey);text-transform:uppercase}
 .hero .intro{
   grid-column:2;grid-row:3;align-self:end;max-width:440px;
   font-size:clamp(17px,1.8vw,22px);line-height:1.4;
@@ -92,17 +92,34 @@ nav a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 }
 @keyframes fade{to{opacity:1}}
 
-/* ---- marquee ---- */
-.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;white-space:nowrap;padding:16px 0}
-.marquee .track{display:inline-block;animation:scroll 26s linear infinite}
-.marquee span{font-family:'Archivo';font-weight:800;font-size:20px;text-transform:uppercase;letter-spacing:.02em;margin-right:48px}
-.marquee em{font-style:normal;color:var(--accent)}
-@keyframes scroll{to{transform:translateX(-50%)}}
+/* ---- draggable pill playground (lives inside the hero) ---- */
+.hero-zone{position:relative}
+#pillWorld{position:absolute;inset:0;overflow:visible;pointer-events:none;z-index:5}
+.pill{
+  position:absolute;left:0;top:0;
+  pointer-events:auto;touch-action:none;cursor:grab;
+  user-select:none;-webkit-user-select:none;
+  font-family:'Archivo';font-weight:800;
+  font-size:clamp(13px,1.5vw,19px);
+  text-transform:uppercase;letter-spacing:.02em;
+  padding:12px 22px;border-radius:999px;white-space:nowrap;
+  color:#fff;will-change:transform;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+.pill:active{cursor:grabbing}
+.pill.light{color:var(--ink)}
+/* static fallback (reduced motion / no physics) */
+#pillWorld.static-mode{
+  inset:auto;left:50%;bottom:24px;transform:translateX(-50%);
+  width:min(560px,60vw);
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+}
+#pillWorld.static-mode .pill{position:static;transform:none!important;pointer-events:none;box-shadow:none}
 
 /* ---- sections ---- */
 section{padding:clamp(64px,8vw,120px) var(--pad)}
 /* tighten the seam between Work and About (their paddings were stacking) */
-#work{padding-bottom:clamp(24px,3vw,48px)}
+#work{padding-top:clamp(24px,3vw,48px);padding-bottom:clamp(24px,3vw,48px)}
 #about{padding-top:clamp(24px,3vw,48px)}
 .eyebrow{
   font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.12em;
@@ -281,6 +298,7 @@ footer .foot-row a:hover{color:var(--accent)}
   </nav>
 
   <!-- ================= HERO ================= -->
+  <div class="hero-zone">
   <header class="hero">
     <h1>
       <span class="line"><span>KEVIN</span></span>
@@ -293,7 +311,7 @@ footer .foot-row a:hover{color:var(--accent)}
 
     <div class="meta">
       <a href="mailto:kevyang04@gmail.com">kevyang04@gmail.com ↗</a>
-      <span class="loc">Vancouver, BC — Open to marketing roles</span>
+      <span class="loc">Vancouver, BC — Available for marketing roles</span>
     </div>
 
     <p class="intro">
@@ -305,11 +323,9 @@ footer .foot-row a:hover{color:var(--accent)}
   </header>
 
   <!-- ================= MARQUEE ================= -->
-  <div class="marquee" aria-hidden="true">
-    <div class="track" id="track">
-      <span>Campaign Strategy <em>✦</em></span><span>Marketing Analytics <em>✦</em></span><span>Social Media <em>✦</em></span><span>E-Commerce <em>✦</em></span><span>Photography <em>✦</em></span><span>Adobe Journey Optimizer <em>✦</em></span><span>Content Creation <em>✦</em></span>
-    </div>
-  </div>
+  <!-- physics pills rain into the hero; floor = bottom of the cover -->
+  <div id="pillWorld" aria-hidden="true"></div>
+  </div><!-- /hero-zone -->
 
   <!-- ================= WORK ================= -->
   <section id="work">
@@ -491,10 +507,161 @@ footer .foot-row a:hover{color:var(--accent)}
 
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 <script>
-const track = document.getElementById('track');
-track.innerHTML += track.innerHTML;
+/* ================= draggable pill playground ================= */
+(function(){
+  const SKILLS = [
+    ['Campaign Strategy','#2b39ff',false],
+    ['Marketing Analytics','#0a0a0a',false],
+    ['Social Media','#c8102e',false],
+    ['E-Commerce','#00a86b',false],
+    ['Photography','#7a3cff',false],
+    ['Adobe Journey Optimizer','#f2b400',true],
+    ['Content Creation','#ff6a00',false]
+  ];
+  const world = document.getElementById('pillWorld');
+  const zone = document.querySelector('.hero-zone');
+  if(!world || !zone) return;
 
+  // build DOM pills
+  const els = SKILLS.map(([label,color,light])=>{
+    const el = document.createElement('div');
+    el.className = 'pill' + (light ? ' light' : '');
+    el.style.background = color;
+    el.textContent = label;
+    world.appendChild(el);
+    return el;
+  });
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced || typeof Matter === 'undefined'){
+    world.classList.add('static-mode');   // graceful fallback: neat row, no physics
+    return;
+  }
+
+  function boot(){
+  const { Engine, Bodies, Body, Composite, Sleeping } = Matter;
+  const engine = Engine.create({ enableSleeping:true });
+  engine.gravity.y = 1.1;
+
+  let W = zone.clientWidth, H = zone.clientHeight;
+  const WALL = 200;
+  let statics = [];
+  // the floor sits on the "Selected Work" divider line below the hero
+  function floorY(){
+    const work = document.getElementById('work');
+    if(!work) return zone.clientHeight;
+    const zr = zone.getBoundingClientRect();
+    const wr = work.getBoundingClientRect();
+    const padTop = parseFloat(getComputedStyle(work).paddingTop) || 0;
+    return wr.top - zr.top + padTop + 9;   // +9 ≈ vertical center of the eyebrow line
+  }
+  function buildWalls(){
+    if(statics.length) Composite.remove(engine.world, statics);
+    const fy = floorY();
+    H = fy;
+    statics = [
+      Bodies.rectangle(W/2, fy + WALL/2, W + WALL*2, WALL, {isStatic:true}),          // floor = Selected Work line
+      Bodies.rectangle(-WALL/2 + 2, fy/2 - 600, WALL, fy + 1600, {isStatic:true}),    // left wall
+      Bodies.rectangle(W + WALL/2 - 2, fy/2 - 600, WALL, fy + 1600, {isStatic:true})  // right wall
+    ];
+    Composite.add(engine.world, statics);
+  }
+  buildWalls();
+
+  // bodies: spawn above the viewport, staggered so they rain down
+  const bodies = els.map((el,i)=>{
+    const w = el.offsetWidth, h = el.offsetHeight;
+    const x = (W * (0.15 + 0.7 * Math.random()));
+    const y = -80 - i * 140 - Math.random() * 120;
+    const b = Bodies.rectangle(x, y, w, h, {
+      chamfer:{ radius: h/2 },
+      restitution:.45, friction:.25, frictionAir:.012, density:.0016,
+      angle:(Math.random()-.5)*.6
+    });
+    b._el = el; b._w = w; b._h = h;
+    return b;
+  });
+  Composite.add(engine.world, bodies);
+
+  // render loop: sync DOM to physics
+  let raf, last = performance.now();
+  function tick(now){
+    const dt = Math.min(now - last, 33); last = now;
+    Engine.update(engine, dt);
+    for(const b of bodies){
+      b._el.style.transform =
+        `translate(${b.position.x - b._w/2}px, ${b.position.y - b._h/2}px) rotate(${b.angle}rad)`;
+    }
+    raf = requestAnimationFrame(tick);
+  }
+  raf = requestAnimationFrame(tick);
+
+  // pointer drag & throw
+  bodies.forEach(b=>{
+    const el = b._el;
+    let px=0, py=0, pt=0;
+    el.addEventListener('pointerdown', e=>{
+      e.preventDefault();
+      el.setPointerCapture(e.pointerId);
+      Sleeping.set(b, false);
+      const r = zone.getBoundingClientRect();
+      px = e.clientX - r.left; py = e.clientY - r.top; pt = performance.now();
+      Body.setVelocity(b, {x:0, y:0});
+      Body.setAngularVelocity(b, 0);
+      el._drag = true;
+    });
+    el.addEventListener('pointermove', e=>{
+      if(!el._drag) return;
+      const r = zone.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      const now = performance.now(), dt = Math.max(now - pt, 1);
+      Sleeping.set(b, false);
+      Body.setPosition(b, {x, y});
+      // velocity in px-per-tick (16.7ms), capped so throws stay controllable
+      const vx = Math.max(-28, Math.min(28, (x - px) / dt * 16.7));
+      const vy = Math.max(-28, Math.min(28, (y - py) / dt * 16.7));
+      Body.setVelocity(b, {x:vx, y:vy});
+      px = x; py = y; pt = now;
+    });
+    const release = e=>{ el._drag = false; };
+    el.addEventListener('pointerup', release);
+    el.addEventListener('pointercancel', release);
+  });
+
+  // keep the sim sized to the hero zone
+  let rz;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(rz);
+    rz = setTimeout(()=>{
+      W = zone.clientWidth;
+      buildWalls();
+      bodies.forEach(b=>{
+        Sleeping.set(b,false);
+        Body.setPosition(b,{
+          x: Math.min(Math.max(b.position.x, b._w/2), W - b._w/2),
+          y: Math.min(b.position.y, H - b._h/2)
+        });
+      });
+    }, 200);
+  });
+
+  // pause the loop when the hero is off screen (saves battery)
+  new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){ if(!raf){ last = performance.now(); raf = requestAnimationFrame(tick);} }
+      else { cancelAnimationFrame(raf); raf = null; }
+    });
+  }).observe(zone);
+  }
+  // wait for fonts so pill sizes & text-ledge positions are measured accurately
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(()=>requestAnimationFrame(boot));
+  } else { boot(); }
+})();
+</script>
+<script>
 const io = new IntersectionObserver(entries=>{
   entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
 },{threshold:.12});
