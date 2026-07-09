@@ -136,10 +136,20 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
 .work-item.open .work-detail{grid-template-rows:1fr}
 .detail-pad{padding:8px 0 40px}
 /* embedded media inside dropdowns (YouTube / Instagram) */
-.embed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;align-items:start;margin-top:8px}
-.yt-wrap{grid-column:1/-1;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;max-width:960px}
+.embed-grid{display:grid;grid-template-columns:1.5fr repeat(3,minmax(0,1fr));gap:16px;align-items:start;margin-top:8px}
+.embed-grid>*{min-width:0}
+.yt-wrap{aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
 .yt-wrap iframe{width:100%;height:100%;border:0;display:block}
-.instagram-media{margin:0 !important;min-width:0 !important;width:100% !important;border-radius:12px !important}
+.instagram-media{
+  margin:0 !important;min-width:0 !important;width:100% !important;
+  max-width:none !important;border-radius:12px !important;
+  background:#fafafa;border:1px solid var(--line) !important;
+  min-height:420px;
+}
+@media(max-width:1280px){
+  .embed-grid{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .yt-wrap{grid-column:1/-1;max-width:960px}
+}
 /* photo slots inside dropdowns */
 .detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .d-slot{
@@ -329,14 +339,19 @@ footer .foot-row a:hover{color:var(--accent)}
                         allowfullscreen></iframe>
               </div>
               <blockquote class="instagram-media"
-                          data-instgrm-permalink="https://www.instagram.com/p/PASTE_POST_CODE_1/"
+                          data-instgrm-permalink="https://www.instagram.com/p/Ctr1iKBOtCB/"
                           data-instgrm-version="14">
-                <a href="https://www.instagram.com/tapouttuning/" target="_blank" rel="noopener">View this post on Instagram</a>
+                <a href="https://www.instagram.com/p/Ctr1iKBOtCB/" target="_blank" rel="noopener">View this post on Instagram</a>
               </blockquote>
               <blockquote class="instagram-media"
-                          data-instgrm-permalink="https://www.instagram.com/p/PASTE_POST_CODE_2/"
+                          data-instgrm-permalink="https://www.instagram.com/reel/C9U46GDIjcQ/"
                           data-instgrm-version="14">
-                <a href="https://www.instagram.com/tapouttuning/" target="_blank" rel="noopener">View this post on Instagram</a>
+                <a href="https://www.instagram.com/reel/C9U46GDIjcQ/" target="_blank" rel="noopener">View this reel on Instagram</a>
+              </blockquote>
+              <blockquote class="instagram-media"
+                          data-instgrm-permalink="https://www.instagram.com/p/C9u_7lHuWw_/"
+                          data-instgrm-version="14">
+                <a href="https://www.instagram.com/p/C9u_7lHuWw_/" target="_blank" rel="noopener">View this post on Instagram</a>
               </blockquote>
             </div>
           </div>
