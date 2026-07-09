@@ -529,6 +529,7 @@ footer .foot-row a:hover{color:var(--accent)}
     const el = document.createElement('div');
     el.className = 'pill' + (light ? ' light' : '');
     el.style.background = color;
+    el.style.transform = 'translate(-9999px,-9999px)';   // hidden until physics boots
     el.textContent = label;
     world.appendChild(el);
     return el;
@@ -655,10 +656,14 @@ footer .foot-row a:hover{color:var(--accent)}
     });
   }).observe(zone);
   }
-  // wait for fonts so pill sizes & text-ledge positions are measured accurately
+  // prefer booting after fonts load (accurate pill sizes), but never wait
+  // more than 1.5s — fonts.ready can stall on a first uncached visit
+  let booted = false;
+  function bootOnce(){ if(booted) return; booted = true; boot(); }
   if(document.fonts && document.fonts.ready){
-    document.fonts.ready.then(()=>requestAnimationFrame(boot));
-  } else { boot(); }
+    document.fonts.ready.then(()=>requestAnimationFrame(bootOnce));
+    setTimeout(bootOnce, 1500);
+  } else { bootOnce(); }
 })();
 </script>
 <script>
