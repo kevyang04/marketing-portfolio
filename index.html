@@ -136,19 +136,32 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
 .work-item.open .work-detail{grid-template-rows:1fr}
 .detail-pad{padding:8px 0 40px}
 /* embedded media inside dropdowns (YouTube / Instagram) */
-.embed-grid{display:grid;grid-template-columns:1.5fr repeat(3,minmax(0,1fr));gap:16px;align-items:start;margin-top:8px}
+/* One grid row, items stretch: the 16:9 video sets the row height and the
+   Instagram crops stretch to match it exactly — at every viewport width. */
+.embed-grid{display:grid;grid-template-columns:1.5fr repeat(3,minmax(0,1fr));gap:16px;align-items:stretch;margin-top:8px}
 .embed-grid>*{min-width:0}
 .yt-wrap{aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
 .yt-wrap iframe{width:100%;height:100%;border:0;display:block}
-.instagram-media{
-  margin:0 !important;min-width:0 !important;width:100% !important;
-  max-width:none !important;border-radius:12px !important;
-  background:#fafafa;border:1px solid var(--line) !important;
-  min-height:420px;
+/* Instagram: direct iframe embed, cropped so only the media shows.
+   top:-54px hides the profile header; overflow:hidden clips the
+   likes / comments / caption footer below the media. */
+.ig-crop{
+  position:relative;overflow:hidden;border-radius:12px;
+  background:#f2f2f2;border:1px solid var(--line);
+}
+.ig-crop iframe{
+  position:absolute;top:-54px;left:0;
+  width:100%;height:calc(100% + 254px);
+  border:0;display:block;
 }
 @media(max-width:1280px){
-  .embed-grid{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .embed-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .yt-wrap{grid-column:1/-1;max-width:960px}
+  .ig-crop{aspect-ratio:4/5}  /* video no longer sets row height, so crops size themselves */
+}
+@media(max-width:700px){
+  .embed-grid{grid-template-columns:1fr}
+  .ig-crop{aspect-ratio:4/5;max-width:480px}
 }
 /* photo slots inside dropdowns */
 .detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -247,7 +260,8 @@ footer .foot-row a:hover{color:var(--accent)}
 /* ---- responsive ---- */
 @media(max-width:760px){
   .hero{grid-template-columns:1fr;min-height:auto}
-  @media(prefers-reduced-motion:reduce){
+}
+@media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .hero h1 .line span{transform:none}
   .hero .meta,.hero .intro{opacity:1;transform:none}
@@ -338,21 +352,22 @@ footer .foot-row a:hover{color:var(--accent)}
                         allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowfullscreen></iframe>
               </div>
-              <blockquote class="instagram-media"
-                          data-instgrm-permalink="https://www.instagram.com/p/Ctr1iKBOtCB/"
-                          data-instgrm-version="14">
-                <a href="https://www.instagram.com/p/Ctr1iKBOtCB/" target="_blank" rel="noopener">View this post on Instagram</a>
-              </blockquote>
-              <blockquote class="instagram-media"
-                          data-instgrm-permalink="https://www.instagram.com/reel/C9U46GDIjcQ/"
-                          data-instgrm-version="14">
-                <a href="https://www.instagram.com/reel/C9U46GDIjcQ/" target="_blank" rel="noopener">View this reel on Instagram</a>
-              </blockquote>
-              <blockquote class="instagram-media"
-                          data-instgrm-permalink="https://www.instagram.com/p/C9u_7lHuWw_/"
-                          data-instgrm-version="14">
-                <a href="https://www.instagram.com/p/C9u_7lHuWw_/" target="_blank" rel="noopener">View this post on Instagram</a>
-              </blockquote>
+              <!-- EDIT: to swap a post, change the ID between /p/ (or /reel/) and /embed/ -->
+              <div class="ig-crop">
+                <iframe src="https://www.instagram.com/p/Ctr1iKBOtCB/embed/"
+                        title="Tapout Tuning Instagram post"
+                        loading="lazy" scrolling="no"></iframe>
+              </div>
+              <div class="ig-crop">
+                <iframe src="https://www.instagram.com/reel/C9U46GDIjcQ/embed/"
+                        title="Tapout Tuning Instagram reel"
+                        loading="lazy" scrolling="no"></iframe>
+              </div>
+              <div class="ig-crop">
+                <iframe src="https://www.instagram.com/p/C9u_7lHuWw_/embed/"
+                        title="Tapout Tuning Instagram post"
+                        loading="lazy" scrolling="no"></iframe>
+              </div>
             </div>
           </div>
         </div>
@@ -655,8 +670,6 @@ document.querySelectorAll('.work-item').forEach(item=>{
   head.addEventListener('click',()=>{
     const open = item.classList.toggle('open');
     head.setAttribute('aria-expanded', open);
-    // Instagram embeds sometimes need a nudge when revealed inside a dropdown
-    if(open && window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process();
   });
 });
 
@@ -718,6 +731,5 @@ slidesEl.addEventListener('touchend',e=>{
 
 go(0);
 </script>
-<script async src="https://www.instagram.com/embed.js"></script>
 </body>
 </html>
