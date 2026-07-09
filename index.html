@@ -135,6 +135,11 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
 .work-detail>.detail-inner{overflow:hidden;min-height:0}
 .work-item.open .work-detail{grid-template-rows:1fr}
 .detail-pad{padding:8px 0 40px}
+/* embedded media inside dropdowns (YouTube / Instagram) */
+.embed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;align-items:start;margin-top:8px}
+.yt-wrap{grid-column:1/-1;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;max-width:960px}
+.yt-wrap iframe{width:100%;height:100%;border:0;display:block}
+.instagram-media{margin:0 !important;min-width:0 !important;width:100% !important;border-radius:12px !important}
 /* photo slots inside dropdowns */
 .detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .d-slot{
@@ -312,11 +317,27 @@ footer .foot-row a:hover{color:var(--accent)}
         <div class="detail-inner">
           <div class="detail-pad">
             <p style="color:var(--grey);font-size:15px;line-height:1.55;max-width:680px;margin-bottom:24px">Produced targeted multimedia content that lifted engagement <b style="color:var(--ink);font-weight:600">200% on average</b> across Instagram, Facebook, and YouTube. Consultative sales calls converted leads into multiple <b style="color:var(--ink);font-weight:600">$25,000 deals</b>.</p>
-            <!-- Drop images into photos/ as tapout-1.jpg, tapout-2.jpg, tapout-3.jpg -->
-            <div class="detail-grid">
-              <div class="d-slot"><img src="photos/tapout-1.jpg" alt="Tapout Tuning work sample" onerror="this.remove()"><div class="empty">photos/tapout-1.jpg</div></div>
-              <div class="d-slot"><img src="photos/tapout-2.jpg" alt="Tapout Tuning work sample" onerror="this.remove()"><div class="empty">photos/tapout-2.jpg</div></div>
-              <div class="d-slot"><img src="photos/tapout-3.jpg" alt="Tapout Tuning work sample" onerror="this.remove()"><div class="empty">photos/tapout-3.jpg</div></div>
+            <!-- EDIT: to swap the video, replace the ID after /embed/ in the src.
+                 EDIT: for each Instagram post, open the post > ... menu > copy link,
+                 and paste the URL into data-instgrm-permalink (keep the trailing slash). -->
+            <div class="embed-grid">
+              <div class="yt-wrap">
+                <iframe src="https://www.youtube-nocookie.com/embed/b8klpF0U69c"
+                        title="Tapout Tuning — video content by Kevin Yang"
+                        loading="lazy"
+                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+              </div>
+              <blockquote class="instagram-media"
+                          data-instgrm-permalink="https://www.instagram.com/p/PASTE_POST_CODE_1/"
+                          data-instgrm-version="14">
+                <a href="https://www.instagram.com/tapouttuning/" target="_blank" rel="noopener">View this post on Instagram</a>
+              </blockquote>
+              <blockquote class="instagram-media"
+                          data-instgrm-permalink="https://www.instagram.com/p/PASTE_POST_CODE_2/"
+                          data-instgrm-version="14">
+                <a href="https://www.instagram.com/tapouttuning/" target="_blank" rel="noopener">View this post on Instagram</a>
+              </blockquote>
             </div>
           </div>
         </div>
@@ -440,7 +461,7 @@ footer .foot-row a:hover{color:var(--accent)}
       <span>
         <a href="https://linkedin.com/in/kyang04" target="_blank" rel="noopener">LinkedIn</a> &nbsp;/&nbsp;
         <!-- EDIT: link your tailored resume PDF -->
-        <a href="#">Resume (PDF)</a>
+        <a href="resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
       </span>
       <span>Vancouver, BC</span>
     </div>
@@ -619,6 +640,8 @@ document.querySelectorAll('.work-item').forEach(item=>{
   head.addEventListener('click',()=>{
     const open = item.classList.toggle('open');
     head.setAttribute('aria-expanded', open);
+    // Instagram embeds sometimes need a nudge when revealed inside a dropdown
+    if(open && window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process();
   });
 });
 
@@ -680,5 +703,6 @@ slidesEl.addEventListener('touchend',e=>{
 
 go(0);
 </script>
+<script async src="https://www.instagram.com/embed.js"></script>
 </body>
 </html>
