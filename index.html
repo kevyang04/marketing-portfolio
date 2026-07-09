@@ -171,6 +171,18 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
   .embed-grid{grid-template-columns:1fr}
   .ig-crop{max-width:480px}
 }
+/* two-post variant (Gen AI Lab): same crop treatment, centered */
+.embed-grid--duo{grid-template-columns:repeat(2,min(380px,44%));justify-content:center}
+@media(max-width:700px){
+  .embed-grid--duo{grid-template-columns:min(480px,100%);justify-items:center}
+}
+.ext-link{
+  display:inline-flex;align-items:center;gap:8px;
+  color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;
+  border-bottom:2px solid var(--ink);padding-bottom:2px;
+  transition:color .25s,border-color .25s;
+}
+.ext-link:hover{color:var(--accent);border-color:var(--accent)}
 /* photo slots inside dropdowns */
 .detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .d-slot{
@@ -341,7 +353,7 @@ footer .foot-row a:hover{color:var(--accent)}
         <h3>Tapout Tuning — Sales &amp; Social Growth</h3>
         <span class="brand">
           <img src="photos/logo-tapout.png" alt="Tapout Tuning">
-          <span class="tags">E-Commerce &amp; Social</span>
+          <span class="tags">E-Commerce / Social</span>
         </span>
         <span class="w-toggle" aria-hidden="true">+</span>
       </button>
@@ -388,7 +400,7 @@ footer .foot-row a:hover{color:var(--accent)}
         <h3>Gen AI Exploration Lab — Adoption Program</h3>
         <span class="brand">
           <img src="photos/logo-ithaca.png" alt="Ithaca College">
-          <span class="tags">Leadership &amp; Education</span>
+          <span class="tags">Leadership / Education</span>
         </span>
         <span class="w-toggle" aria-hidden="true">+</span>
       </button>
@@ -396,12 +408,22 @@ footer .foot-row a:hover{color:var(--accent)}
         <div class="detail-inner">
           <div class="detail-pad">
             <p style="color:var(--grey);font-size:15px;line-height:1.55;max-width:680px;margin-bottom:24px">Led a team of 3 supporting <b style="color:var(--ink);font-weight:600">200+ faculty and students</b> with AI adoption across ChatGPT, Copilot, and Claude — directing research, developing learning materials, and helping educators teach practical, responsible AI skills.</p>
-            <!-- Drop images into photos/ as genai-1.jpg, genai-2.jpg, genai-3.jpg -->
-            <div class="detail-grid">
-              <div class="d-slot"><img src="photos/genai-1.jpg" alt="GenAI Exploration Lab work sample" onerror="this.remove()"><div class="empty">photos/genai-1.jpg</div></div>
-              <div class="d-slot"><img src="photos/genai-2.jpg" alt="GenAI Exploration Lab work sample" onerror="this.remove()"><div class="empty">photos/genai-2.jpg</div></div>
-              <div class="d-slot"><img src="photos/genai-3.jpg" alt="GenAI Exploration Lab work sample" onerror="this.remove()"><div class="empty">photos/genai-3.jpg</div></div>
+            <!-- EDIT: to swap a post, change the ID between /p/ and /embed/ -->
+            <div class="embed-grid embed-grid--duo">
+              <div class="ig-crop">
+                <iframe src="https://www.instagram.com/p/DFgMWUMygtA/embed/"
+                        title="Ithaca College AI Exploration Lab Instagram post"
+                        loading="lazy" scrolling="no"></iframe>
+              </div>
+              <div class="ig-crop">
+                <iframe src="https://www.instagram.com/p/DFqH7NuO8ml/embed/"
+                        title="Ithaca College AI Exploration Lab Instagram post"
+                        loading="lazy" scrolling="no"></iframe>
+              </div>
             </div>
+            <p style="text-align:center;margin-top:28px">
+              <a class="ext-link" href="https://www.ithaca.edu/information-technology-and-analytics/artificial-intelligence-ic/ai-exploration-lab" target="_blank" rel="noopener">Visit the AI Exploration Lab at Ithaca College ↗</a>
+            </p>
           </div>
         </div>
       </div>
@@ -412,7 +434,7 @@ footer .foot-row a:hover{color:var(--accent)}
         <span class="idx">04</span>
         <h3>Freelance Automotive Photography</h3>
         <span class="brand">
-          <span class="tags">Photography &amp; Videography</span>
+          <span class="tags">Freelance / 2019 — 2023</span>
         </span>
         <span class="w-toggle" aria-hidden="true">+</span>
       </button>
