@@ -183,6 +183,50 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
   transition:color .25s,border-color .25s;
 }
 .ext-link:hover{color:var(--accent);border-color:var(--accent)}
+/* ---- KeyBank visual: stat band + journey diagram ---- */
+.kb-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  margin-bottom:28px;
+}
+.kb-stat{padding:24px 20px 24px 0;display:flex;flex-direction:column;gap:10px}
+.kb-stat+.kb-stat{padding-left:24px;border-left:1px solid var(--line)}
+.kb-stat .v{font-family:'Archivo';font-weight:900;font-size:clamp(32px,3.4vw,52px);letter-spacing:-.03em;line-height:1}
+.kb-stat .v em{font-style:normal;color:var(--accent)}
+.kb-stat .k{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--grey);line-height:1.55}
+.kb-journey{background:#fafafa;border:1px solid var(--line);border-radius:16px;padding:clamp(20px,2.5vw,32px)}
+.kb-j-head{
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--grey);margin-bottom:20px;
+}
+.kb-flow{display:flex;align-items:stretch;gap:10px}
+.kb-node{
+  flex:1;min-width:0;background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:16px;display:flex;flex-direction:column;gap:6px;
+  transition:transform .3s cubic-bezier(.16,1,.3,1),border-color .3s;
+}
+.kb-node:hover{transform:translateY(-4px);border-color:var(--ink)}
+.kb-node .n{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.08em;color:var(--accent)}
+.kb-node b{font-family:'Archivo';font-weight:800;font-size:15px;text-transform:uppercase;letter-spacing:-.01em}
+.kb-node small{font-size:12px;line-height:1.5;color:var(--grey)}
+.kb-arrow{align-self:center;color:#b9b9b9;font-size:18px;flex-shrink:0}
+.kb-arrow::before{content:"→"}
+.kb-loop{
+  display:flex;align-items:center;gap:12px;margin-top:16px;
+  font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--grey);
+}
+.kb-loop::before,.kb-loop::after{content:"";height:0;flex:1;border-top:1px dashed #c9c9c9}
+@media(max-width:960px){
+  .kb-stats{grid-template-columns:1fr 1fr}
+  .kb-stat{padding:20px 16px 20px 0}
+  .kb-stat:nth-child(even){padding-left:20px}
+  .kb-stat:nth-child(odd){border-left:none;padding-left:0}
+  .kb-stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .kb-flow{flex-direction:column}
+  .kb-arrow::before{content:"↓"}
+}
 /* photo slots inside dropdowns */
 .detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .d-slot{
@@ -336,11 +380,42 @@ footer .foot-row a:hover{color:var(--accent)}
         <div class="detail-inner">
           <div class="detail-pad">
             <p style="color:var(--grey);font-size:15px;line-height:1.55;max-width:680px;margin-bottom:24px">Designed and presented sponsorship campaign proposals across <b style="color:var(--ink);font-weight:600">5 partner companies</b>, built and tested targeted audiences and customer journeys in <b style="color:var(--ink);font-weight:600">Adobe Journey Optimizer</b>, and turned Sprinklr and Excel engagement data into actionable insights for future campaigns.</p>
-            <!-- Drop images into photos/ as keybank-1.jpg, keybank-2.jpg, keybank-3.jpg -->
-            <div class="detail-grid">
-              <div class="d-slot"><img src="photos/keybank-1.jpg" alt="KeyBank campaign work sample" onerror="this.remove()"><div class="empty">photos/keybank-1.jpg</div></div>
-              <div class="d-slot"><img src="photos/keybank-2.jpg" alt="KeyBank campaign work sample" onerror="this.remove()"><div class="empty">photos/keybank-2.jpg</div></div>
-              <div class="d-slot"><img src="photos/keybank-3.jpg" alt="KeyBank campaign work sample" onerror="this.remove()"><div class="empty">photos/keybank-3.jpg</div></div>
+            <!-- EDIT: swap in real figures as you're comfortable — each .v is a stat value, .k its label -->
+            <div class="kb-stats">
+              <div class="kb-stat">
+                <span class="v">0<em>5</em></span>
+                <span class="k">Partner companies — sponsorship proposals designed &amp; presented</span>
+              </div>
+              <div class="kb-stat">
+                <span class="v">A/B</span>
+                <span class="k">Audiences &amp; customer journeys built and tested in Adobe Journey Optimizer</span>
+              </div>
+              <div class="kb-stat">
+                <span class="v">0<em>3</em></span>
+                <span class="k">Data sources — Sprinklr, Adobe Analytics &amp; Excel engagement data</span>
+              </div>
+              <div class="kb-stat">
+                <span class="v">Top 15</span>
+                <span class="k">U.S. bank — enterprise-scale marketing organization</span>
+              </div>
+            </div>
+            <div class="kb-journey">
+              <div class="kb-j-head">
+                <span>Anatomy of a campaign</span>
+                <span>Adobe Journey Optimizer · Sprinklr · Excel</span>
+              </div>
+              <div class="kb-flow">
+                <div class="kb-node"><span class="n">01</span><b>Audience</b><small>Targeted segments built for each campaign</small></div>
+                <span class="kb-arrow" aria-hidden="true"></span>
+                <div class="kb-node"><span class="n">02</span><b>Journey</b><small>Entry triggers &amp; touchpoints mapped in AJO</small></div>
+                <span class="kb-arrow" aria-hidden="true"></span>
+                <div class="kb-node"><span class="n">03</span><b>Test</b><small>Variants validated before launch</small></div>
+                <span class="kb-arrow" aria-hidden="true"></span>
+                <div class="kb-node"><span class="n">04</span><b>Measure</b><small>Sprinklr, Adobe Analytics &amp; Excel engagement data</small></div>
+                <span class="kb-arrow" aria-hidden="true"></span>
+                <div class="kb-node"><span class="n">05</span><b>Insight</b><small>Actionable recommendations for what runs next</small></div>
+              </div>
+              <div class="kb-loop">Insights feed the next campaign ↺</div>
             </div>
           </div>
         </div>
