@@ -136,17 +136,18 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
 .work-item.open .work-detail{grid-template-rows:1fr}
 .detail-pad{padding:8px 0 40px}
 /* embedded media inside dropdowns (YouTube / Instagram) */
-/* One grid row, items stretch: the 16:9 video sets the row height and the
-   Instagram crops stretch to match it exactly — at every viewport width. */
-.embed-grid{display:grid;grid-template-columns:1.5fr repeat(3,minmax(0,1fr));gap:16px;align-items:stretch;margin-top:8px}
+/* Column ratio 20:9 makes a 16:9 video and 4:5 posts the exact same
+   height at any viewport width: (16/9) x (5/4) = 20/9. */
+.embed-grid{display:grid;grid-template-columns:20fr repeat(3,9fr);gap:16px;align-items:start;margin-top:8px}
 .embed-grid>*{min-width:0}
 .yt-wrap{aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
 .yt-wrap iframe{width:100%;height:100%;border:0;display:block}
 /* Instagram: direct iframe embed, cropped so only the media shows.
-   top:-54px hides the profile header; overflow:hidden clips the
-   likes / comments / caption footer below the media. */
+   Tiles are true 4:5 (Instagram portrait). top:-54px hides the profile
+   header; overflow:hidden clips the likes / comments footer. */
 .ig-crop{
   position:relative;overflow:hidden;border-radius:12px;
+  aspect-ratio:4/5;
   background:#f2f2f2;border:1px solid var(--line);
 }
 .ig-crop iframe{
@@ -154,14 +155,21 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
   width:100%;height:calc(100% + 254px);
   border:0;display:block;
 }
+/* Reels are 9:16 inside Instagram's 4:5 media box, which pillarboxes them.
+   Zoom the iframe (16/9 / 5/4 = 1.423) around the media's center so the
+   video fills the tile width and the black side bars crop away. */
+.ig-crop--reel iframe{
+  height:calc(100% + 108px);   /* media center = iframe center */
+  transform:scale(1.423);
+  transform-origin:center;
+}
 @media(max-width:1280px){
   .embed-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .yt-wrap{grid-column:1/-1;max-width:960px}
-  .ig-crop{aspect-ratio:4/5}  /* video no longer sets row height, so crops size themselves */
 }
 @media(max-width:700px){
   .embed-grid{grid-template-columns:1fr}
-  .ig-crop{aspect-ratio:4/5;max-width:480px}
+  .ig-crop{max-width:480px}
 }
 /* photo slots inside dropdowns */
 .detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -358,7 +366,7 @@ footer .foot-row a:hover{color:var(--accent)}
                         title="Tapout Tuning Instagram post"
                         loading="lazy" scrolling="no"></iframe>
               </div>
-              <div class="ig-crop">
+              <div class="ig-crop ig-crop--reel">
                 <iframe src="https://www.instagram.com/reel/C9U46GDIjcQ/embed/"
                         title="Tapout Tuning Instagram reel"
                         loading="lazy" scrolling="no"></iframe>
