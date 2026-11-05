@@ -108,7 +108,7 @@ section{padding:clamp(64px,8vw,120px) var(--pad)}
   background:none;border:none;text-align:left;color:var(--ink);font:inherit;
   transition:padding-left .35s cubic-bezier(.65,0,.35,1);cursor:pointer;
 }
-.work-head:hover{padding-left:16px}
+@media(hover:hover){.work-head:hover{padding-left:16px}}
 .work-head:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
 .work-head .idx{font-family:'IBM Plex Mono';font-size:12px;color:var(--grey)}
 .work-head h3{font-family:'Archivo';font-weight:800;font-size:clamp(22px,3.2vw,40px);letter-spacing:-.02em;text-transform:uppercase;transition:color .25s}
@@ -324,7 +324,54 @@ footer .foot-row a:hover{color:var(--accent)}
 
 /* ---- responsive ---- */
 @media(max-width:760px){
-  .hero{grid-template-columns:1fr;min-height:auto}
+  :root{--pad:20px}
+  .frame{margin:6px;border-radius:16px}
+  section{padding:48px var(--pad)}
+  .eyebrow{margin-bottom:24px;font-size:11px}
+
+  /* cover: one column, text stacked, room left for the pills */
+  .hero{grid-template-columns:1fr;grid-template-rows:auto 1fr auto auto;
+        min-height:calc(100svh - 12px);gap:20px;padding:56px var(--pad) 32px}
+  .hero h1{font-size:clamp(56px,19vw,96px)}
+  .hero .meta{grid-column:1;grid-row:3}
+  .hero .intro{grid-column:1;grid-row:4;max-width:none;text-align:left;text-indent:0;
+               font-size:17px;line-height:1.5}
+  .hero .meta a{font-size:18px;word-break:break-all}
+  .hero .meta .loc{font-size:12px;line-height:1.6}
+  .pill{font-size:12px;padding:9px 15px}
+
+  /* work rows: number + title + toggle on top, logo/tags underneath */
+  .work-head{grid-template-columns:auto 1fr auto;gap:8px 14px;padding:24px 0}
+  .work-head .idx{grid-row:1;align-self:start;padding-top:6px}
+  .work-head h3{grid-column:2;grid-row:1;font-size:22px;line-height:1.1}
+  .work-head .w-toggle{grid-column:3;grid-row:1;align-self:start;width:38px;height:38px;font-size:17px}
+  .work-head .brand{grid-column:2/4;grid-row:2;flex-direction:row;align-items:center;
+                    justify-content:flex-start;flex-wrap:wrap;gap:10px 14px}
+  .work-head .brand img{height:20px}
+  .work-head .tags{text-align:left;font-size:10px}
+  .detail-pad{padding:4px 0 32px}
+  .detail-pad>p{font-size:15px !important}
+
+  /* KeyBank stats / photo band */
+  .kb-stat .v{font-size:30px}
+  .photo-band{border-radius:12px}
+  .photo-band .head{flex-direction:column;align-items:flex-start}
+  .photo-band .quote{text-align:left;max-width:none}
+  .photo-band h2{font-size:28px}
+  .carousel .controls{gap:12px}
+  .c-dots{display:none}
+
+  /* about: single column, label above value */
+  .about-grid{grid-template-columns:1fr;gap:32px}
+  .about-grid .big{font-size:22px;line-height:1.35}
+  .fact{flex-direction:column;gap:4px;text-align:left;padding:14px 0;font-size:15px}
+  .chips{gap:8px;margin-top:28px}
+  .chip{font-size:13px;padding:8px 14px}
+
+  /* footer */
+  footer{padding:64px var(--pad) 32px;border-radius:0 0 16px 16px}
+  footer .cta{font-size:clamp(48px,16vw,80px)}
+  footer .foot-row{flex-direction:column;gap:12px;margin-top:48px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -346,7 +393,7 @@ footer .foot-row a:hover{color:var(--accent)}
     </h1>
 
     <div class="meta">
-      <a href="mailto:kevyang04@gmail.com">kevyang04@gmail.com ↗</a>
+      <a href="mailto:kevyang04@gmail.com">kevyang04@gmail.com ↗︎</a>
       <span class="loc">Vancouver, BC — Available for marketing roles</span>
     </div>
 
@@ -493,7 +540,7 @@ footer .foot-row a:hover{color:var(--accent)}
               </div>
             </div>
             <p style="text-align:center;margin-top:28px">
-              <a class="ext-link" href="https://www.ithaca.edu/information-technology-and-analytics/artificial-intelligence-ic/ai-exploration-lab" target="_blank" rel="noopener">Visit the AI Exploration Lab at Ithaca College ↗</a>
+              <a class="ext-link" href="https://www.ithaca.edu/information-technology-and-analytics/artificial-intelligence-ic/ai-exploration-lab" target="_blank" rel="noopener">Visit the AI Exploration Lab at Ithaca College ↗︎</a>
             </p>
           </div>
         </div>
@@ -586,7 +633,7 @@ footer .foot-row a:hover{color:var(--accent)}
     <div class="eyebrow" style="color:rgba(255,255,255,.5)">Contact</div>
     <div class="cta">
       Let's<br>
-      <a href="mailto:kevyang04@gmail.com">Create ↗</a>
+      <a href="mailto:kevyang04@gmail.com">Create ↗︎</a>
     </div>
     <div class="foot-row">
       <span>© 2026 Kevin Yang</span>
@@ -630,7 +677,7 @@ footer .foot-row a:hover{color:var(--accent)}
   });
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduced || typeof Matter === 'undefined'){
+  if(typeof Matter === 'undefined'){
     world.classList.add('static-mode');   // graceful fallback: neat row, no physics
     return;
   }
@@ -645,6 +692,14 @@ footer .foot-row a:hover{color:var(--accent)}
   let statics = [];
   // the floor sits on the "Selected Work" divider line below the hero
   function floorY(){
+    // phones: pills land in the open space under the name, just above the email
+    if(window.matchMedia('(max-width:760px)').matches){
+      const meta = document.querySelector('.hero .meta');
+      if(meta){
+        const zr = zone.getBoundingClientRect(), mr = meta.getBoundingClientRect();
+        return mr.top - zr.top - 16;
+      }
+    }
     const work = document.getElementById('work');
     if(!work) return zone.clientHeight;
     const zr = zone.getBoundingClientRect();
@@ -666,14 +721,25 @@ footer .foot-row a:hover{color:var(--accent)}
   buildWalls();
 
   // bodies: spawn above the viewport, staggered so they rain down
+  // reduced motion: pre-pack pills into rows resting on the floor (no drop)
+  const packed = [];
+  if(reduced){
+    let cx = 16, row = 0;
+    els.forEach(el=>{
+      const w = el.offsetWidth, h = el.offsetHeight;
+      if(cx + w > W - 16){ cx = 16; row++; }
+      packed.push({x: cx + w/2, y: H - h/2 - 2 - row * (h + 8)});
+      cx += w + 8;
+    });
+  }
   const bodies = els.map((el,i)=>{
     const w = el.offsetWidth, h = el.offsetHeight;
-    const x = (W * (0.15 + 0.7 * Math.random()));
-    const y = -80 - i * 140 - Math.random() * 120;
+    const x = reduced ? packed[i].x : (W * (0.15 + 0.7 * Math.random()));
+    const y = reduced ? packed[i].y : -80 - i * 140 - Math.random() * 120;
     const b = Bodies.rectangle(x, y, w, h, {
       chamfer:{ radius: h/2 },
       restitution:.45, friction:.25, frictionAir:.012, density:.0016,
-      angle:(Math.random()-.5)*.6
+      angle: reduced ? 0 : (Math.random()-.5)*.6
     });
     b._el = el; b._w = w; b._h = h;
     return b;
@@ -697,6 +763,7 @@ footer .foot-row a:hover{color:var(--accent)}
   bodies.forEach(b=>{
     const el = b._el;
     let px=0, py=0, pt=0;
+    el.addEventListener('touchstart', e=>e.preventDefault(), {passive:false});
     el.addEventListener('pointerdown', e=>{
       e.preventDefault();
       el.setPointerCapture(e.pointerId);
